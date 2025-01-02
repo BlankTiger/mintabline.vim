@@ -26,7 +26,11 @@ function! s:bufname(tabnr, bufnr, is_term, is_active_tab) abort
       let bufname = strpart(bufname, 0, g:mintabline_tab_max_chars) . g:ellipsis
     endif
 
-    return bufname
+    if bufname == ""
+      let bufname = "---"
+    endif
+
+    return bufname .. " "
 endfunction
 
 " Returns the icon for the buffer
@@ -69,11 +73,9 @@ endfunction
 " Returns the tab label
 function! s:tablabel(tabnr, bufnr, is_active_tab) abort
     let is_term = getbufvar(a:bufnr, '&buftype') == 'terminal'
-    let original_bufname = bufname(a:bufnr)
-    let icon = s:icon(original_bufname, is_term, a:is_active_tab)
     let bufname = s:bufname(a:tabnr, a:bufnr, is_term, a:is_active_tab)
 
-    return s:mergedlabel(bufname, icon)
+    return bufname
 endfunction
 
 function! s:bufmodified(bufnr) abort
